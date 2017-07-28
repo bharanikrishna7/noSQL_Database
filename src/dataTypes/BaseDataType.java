@@ -31,11 +31,16 @@ import constants.DataTypesConstants;
  *   be Overridden in all the Derived Classes, not it's not
  *   required to do so.
  * 
- * 0.1rc : 07/23/2017
+ * 0.1c : 07/23/2017
  * - Added New Constructor which Takes Tags Parameter.
  *   
  * 0.2a : 07/25/2017
  * - Value of Variable _types is now set from constants.DataTypesConstants
+ * 
+ * 0.2b : 07/26/2017
+ * - Added method to check if the derived data type is collection type or not.
+ * - Added method to return timestamp in long.
+ * - Added method to return timestamp in YYYY/mm/DD HH:MM:SS format.
  *   
  * @author Venkata Bharani Krishna, Chekuri
  *
@@ -105,6 +110,20 @@ public class BaseDataType<Data> {
 		_data = data;
 		SetTimestamp();
 		return GetData();
+	}
+	
+	public boolean IsCollection() {
+		if(DataTypesConstants.COLLECTIONDATATYPES.contains(_type))
+			return true;
+		return false;
+	}
+	
+	public long GetTimestamp() {
+		return _timestamp;
+	}
+	
+	public String GetLastModified() {
+		return DateHelper.TimestampToString(_timestamp);
 	}
 	
 	/* always override */

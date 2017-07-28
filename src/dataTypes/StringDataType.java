@@ -28,6 +28,9 @@ import constants.DataTypesConstants;
  * 0.2a : 07/25/2017
  * - Value of Variable _types in base class is now set from constants.DataTypesConstants
  * 
+ * 0.2b : 07/26/2017
+ * - Added ToUpperCase and ToLowerCase methods.
+ * 
  * 
  * @author Venkata Bharani Krishna Chekuri
  *
@@ -73,5 +76,13 @@ public class StringDataType extends BaseDataType<String> {
 	@Override
 	public String DataToString() {
 		return _data;
+	}
+	
+	public String ToUpperCase() {
+		return _data.toUpperCase();
+	}
+	
+	public String ToLowerCase() {
+		return _data.toLowerCase();
 	}
 }

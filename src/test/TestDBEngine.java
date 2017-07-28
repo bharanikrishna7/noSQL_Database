@@ -2,10 +2,14 @@ package test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
+import dataTypes.ArrayListDataType;
 import dataTypes.BaseDataType;
 import dataTypes.BooleanDataType;
+import dataTypes.HashMapDataType;
+import dataTypes.HashSetDataType;
 import dataTypes.IntDataType;
 import dataTypes.StringDataType;
 import dbCore.DBEngine;
@@ -21,11 +25,25 @@ public class TestDBEngine {
 		BaseDataType strObj = new StringDataType("Darth Vadar", new HashSet<>(Arrays.asList("string", "data", "Siths")));
 		System.out.println("Create BooleanDataType Object with value 'TRUE'");
 		BaseDataType boolObj = new BooleanDataType(true, new HashSet<>(Arrays.asList("boolean", "data", "Fives")));
-		
+		BaseDataType arrObj = new ArrayListDataType(new ArrayList<String>(Arrays.asList("Object 1", "Object 2", "Object 3")),
+				new HashSet<>(Arrays.asList("arraylist", "data", "collections")));
+		System.out.println("Create ArrayListDataType Object with value ['Object 1', 'Object 2', 'Object 3']");
+		HashMap<String, String> map = new HashMap<>();
+		map.put("Blade Runner", "Replicants");
+		map.put("Star Wars", "Force");
+		map.put("Terminator", "T-100");
+		BaseDataType mapObj = new HashMapDataType(map, new HashSet<>(Arrays.asList("hashmap", "data", "movies", "collections")));
+		System.out.println("Create HashMapDataType Object");
+		BaseDataType setObj = new HashSetDataType(new HashSet<String>(Arrays.asList("Taco", "Burritto", "Quesadilla")),
+				new HashSet<>(Arrays.asList("hashset", "data", "collections", "food")));
+		System.out.println("Create HashSetDataType Object with value ['Taco', 'Burritto', 'Quesadilla']");
+		System.out.println();
 		objects.add(intObj);
 		objects.add(strObj);
 		objects.add(boolObj);
-		
+		objects.add(arrObj);
+		objects.add(mapObj);
+		objects.add(setObj);
 		return objects;
 	}
 	
@@ -33,7 +51,7 @@ public class TestDBEngine {
 	public static void InsertCreated(DBEngine db) {
 		System.out.println(StringHelper.SubTitle("Create Objects to be Inserted into Database", '-'));
 		ArrayList<BaseDataType> objects = createDBObjects();
-		System.out.println("Objects Created\n\n");
+		System.out.println("[STATUS] : Objects Created\n\n");
 		
 		System.out.println(StringHelper.SubTitle("Insert Objects into Database", '-'));
 		{
@@ -42,7 +60,7 @@ public class TestDBEngine {
 				System.out.println("Inserted : " + db.Insert("Key"+Integer.toString(count), object));
 				count++;
 			}
-			System.out.println("Total KVP inserted : " + count + "\n\n");
+			System.out.println("\n[STATUS] : Total KVP inserted : " + count + "\n\n");
 		}
 	}
 	
@@ -54,13 +72,17 @@ public class TestDBEngine {
 		System.out.println(StringHelper.SubTitle("Search Objects by Tags in Database", '-'));
 		System.out.print(StringHelper.SubTitle("Search for All Objects with Tag : 'Fives'", '~'));
 		System.out.println("\n" + db.SearchByTag("Fives"));
+		
+
+		System.out.print(StringHelper.SubTitle("Search for All Objects with Tag : 'collections'", '~'));
+		System.out.println("\n" + db.SearchByTag("collections"));
 	}
 	
 	private static void UpdateAndRemove(DBEngine db) {
 		System.out.println(StringHelper.SubTitle("Update Object with Key : 'Key0'", '-'));
 		System.out.println(StringHelper.SubTitle("Old 'Key0' Details", '~'));
 		System.out.println(db.Get("Key0"));
-		StringDataType object = new StringDataType("Luke Skywaalker", new HashSet<>(Arrays.asList("Jedi Master", "string", "data")));
+		StringDataType object = new StringDataType("Luke Skywalker", new HashSet<>(Arrays.asList("Jedi Master", "string", "data")));
 		System.out.println("Update Status : " + db.Update("Key0", object) + "\n");
 		System.out.println(StringHelper.SubTitle("New 'Key0' Details", '~'));
 		System.out.println(db.Get("Key0") + "\n");

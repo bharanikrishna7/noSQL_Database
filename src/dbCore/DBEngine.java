@@ -37,11 +37,14 @@ import utilities.StringHelper;
  * 0.1d : 07/25/2017
  * - DBEngine now uses Logger to log operational information to a log 
  *   file. Currently logger logs Insert, Update, Remove & Show operations.
- *   
+ * 
+ * 0.2a : 07/28/2017
+ * - Added Methods to Natively Insert and Update ArrayListDataType, HashSetDataType
+ *   and HashMapDataType.
  *   
  * Additional Information
  * ----------------------
- * - 0.1rc Update could be implemented in a more sophisticated way using AOP
+ * - Update could be implemented in a more sophisticated way using AOP
  *   in spring framework. But I wanted to use as less 3rd party libraries as
  *   possible.
  * 
@@ -133,6 +136,33 @@ public class DBEngine {
 		return true;
 	}
 	
+	public boolean Insert(String key, ArrayListDataType value) {
+		if(Exists(key))
+			return false;
+		_dbEngine.put(key, value);
+		IndexAddTags(key, value);
+		logger.Log("Inserted Object with key \"" + key + "\" into Database");
+		return true;
+	}
+	
+	public boolean Insert(String key, HashSetDataType value) {
+		if(Exists(key))
+			return false;
+		_dbEngine.put(key, value);
+		IndexAddTags(key, value);
+		logger.Log("Inserted Object with key \"" + key + "\" into Database");
+		return true;
+	}
+	
+	public boolean Insert(String key, HashMapDataType value) {
+		if(Exists(key))
+			return false;
+		_dbEngine.put(key, value);
+		IndexAddTags(key, value);
+		logger.Log("Inserted Object with key \"" + key + "\" into Database");
+		return true;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public boolean Update(String key, BaseDataType value) {
 		if(!Exists(key))
@@ -165,6 +195,36 @@ public class DBEngine {
 	}
 	
 	public boolean Update(String key, BooleanDataType value) {
+		if(!Exists(key))
+			return false;
+		IndexRemoveTags(key);
+		_dbEngine.replace(key, value);
+		IndexAddTags(key, value);
+		logger.Log("Updated Object with key \"" + key + "\" in Database");
+		return true;
+	}
+	
+	public boolean Update(String key, ArrayListDataType value) {
+		if(!Exists(key))
+			return false;
+		IndexRemoveTags(key);
+		_dbEngine.replace(key, value);
+		IndexAddTags(key, value);
+		logger.Log("Updated Object with key \"" + key + "\" in Database");
+		return true;
+	}
+
+	public boolean Update(String key, HashSetDataType value) {
+		if(!Exists(key))
+			return false;
+		IndexRemoveTags(key);
+		_dbEngine.replace(key, value);
+		IndexAddTags(key, value);
+		logger.Log("Updated Object with key \"" + key + "\" in Database");
+		return true;
+	}
+
+	public boolean Update(String key, HashMapDataType value) {
 		if(!Exists(key))
 			return false;
 		IndexRemoveTags(key);
